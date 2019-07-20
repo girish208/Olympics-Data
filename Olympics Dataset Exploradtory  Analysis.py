@@ -1,91 +1,49 @@
 
 # coding: utf-8
 
-# In[134]:
+# In[5]:
 
 
 import os
 import matplotlib.pyplot as plt
 
 
-# In[2]:
+# In[6]:
 
 
 os.getcwd()
 
 
-# In[3]:
+# In[13]:
 
 
-os.chdir('C:/Users/ASUS/Desktop/ACF')
+os.chdir('C:/Users/ASUS/Desktop/ACF/Olympics Data Analysis')
 
 
-# In[4]:
+# In[8]:
 
 
 os.getcswd()
 
 
-# In[5]:
+# In[14]:
 
 
 os.getcwd()
 
 
-# In[6]:
+# In[15]:
 
 
 import pandas as pd
 import numpy as np
 
 
-# In[7]:
+# In[16]:
 
 
 events=pd.read_csv('athlete_events.csv')
 regions=pd.read_csv('noc_regions.csv')
-
-
-# In[8]:
-
-
-events.head()
-
-
-# In[9]:
-
-
-events.info()
-
-
-# In[10]:
-
-
-glimpse(events)
-
-
-# In[12]:
-
-
-#Factoring null values
-
-
-# In[13]:
-
-
-print(events.isnull().sum())
-
-
-# In[15]:
-
-
-events['Medal'].fillna('DNW',inplace=True)
-
-
-# In[16]:
-
-
-events.info()
 
 
 # In[17]:
@@ -97,10 +55,52 @@ events.head()
 # In[18]:
 
 
-print(events.loc[:,['NOC','Team']].drop_duplicates()['NOC'].value_counts().head())
+events.info()
+
+
+# In[19]:
+
+
+glimpse(events)
+
+
+# In[12]:
+
+
+#Factoring null values
 
 
 # In[20]:
+
+
+print(events.isnull().sum())
+
+
+# In[21]:
+
+
+events['Medal'].fillna('DNW',inplace=True)
+
+
+# In[22]:
+
+
+events.info()
+
+
+# In[23]:
+
+
+events.head()
+
+
+# In[24]:
+
+
+print(events.loc[:,['NOC','Team']].drop_duplicates()['NOC'].value_counts().head())
+
+
+# In[25]:
 
 
 #noc_country mapping
@@ -110,7 +110,7 @@ regions.rename(columns={'region':'Country'},inplace=True)
 regions.head()
 
 
-# In[32]:
+# In[26]:
 
 
 #merging noc data with Olympics Events data
@@ -120,55 +120,55 @@ events_merge=events.merge(regions,
                          how='left')
 
 
-# In[33]:
+# In[27]:
 
 
 events_merge.head()
 
 
-# In[34]:
+# In[28]:
 
 
 events_merge.shape
 
 
-# In[35]:
+# In[29]:
 
 
 events.shape
 
 
-# In[36]:
+# In[30]:
 
 
 regions.shape
 
 
-# In[37]:
+# In[31]:
 
 
 events_merge['NOC'].nunique()
 
 
-# In[38]:
+# In[32]:
 
 
 events_merge.loc[events_merge['Country'].isnull(),['NOC','Team']].drop_duplicates()
 
 
-# In[39]:
+# In[33]:
 
 
 null_values=events_merge['Country'].isnull()
 
 
-# In[40]:
+# In[34]:
 
 
 null_values
 
 
-# In[41]:
+# In[35]:
 
 
 null_values.info
@@ -192,14 +192,14 @@ null_values.nunique()
 print(null_values==True)
 
 
-# In[55]:
+# In[36]:
 
 
 events_merge.loc[events_merge['Country'].isnull()==True,['NOC','Team']].drop_duplicates()
 
 
 
-# In[56]:
+# In[37]:
 
 
 events_merge['Country']=np.where(events_merge['NOC']=='SGP','Singapore',events_merge['Country'])
@@ -210,7 +210,7 @@ events_merge.drop('Team',axis=1,inplace=True)
 events_merge.rename(columns={'Country':'Team'},inplace=True)
 
 
-# In[59]:
+# In[38]:
 
 
 events_merge.head()
@@ -218,7 +218,7 @@ events_merge.info()
 print(events_merge.isnull().sum())
 
 
-# In[60]:
+# In[39]:
 
 
 print(events.isnull().sum())
@@ -230,32 +230,32 @@ print(events.isnull().sum())
 print(events_merge.loc[:,['NOC','Team']].drop_duplicates()['NOC'].value_counts().head())
 
 
-# In[64]:
+# In[40]:
 
 
 gdp=pd.read_csv('world_gdp.csv',skiprows=3)
 gdp.drop(['Indicator Name','Indicator Code'],axis=1,inplace=True)
 
 
-# In[65]:
+# In[41]:
 
 
 gdp.head()
 
 
-# In[67]:
+# In[42]:
 
 
 gdp=pd.melt(gdp,id_vars=['Country Name','Country Code'],var_name='Year',value_name='GDP')
 
 
-# In[68]:
+# In[43]:
 
 
 gdp.head()
 
 
-# In[72]:
+# In[44]:
 
 
 events_merge_ccode = events_merge.merge(gdp[['Country Name', 'Country Code']].drop_duplicates(),
@@ -268,32 +268,32 @@ events_merge_ccode.drop('Country Name', axis = 1, inplace = True)
 # Merge to get gdp too
 
 
-# In[73]:
+# In[45]:
 
 
 events_merge_gdp=events_merge_ccode.merge(gdp,left_on=['Country Code','Year'],right_on=['Country Code','Year'],how='left')
 
 
-# In[74]:
+# In[46]:
 
 
 events_merge_ccode['Year']=events_merge_ccode['Year'].astype(int)
 gdp['Year']=gdp['Year'].astype('int')
 
 
-# In[75]:
+# In[47]:
 
 
 events_merge_gdp=events_merge_ccode.merge(gdp,left_on=['Country Code','Year'],right_on=['Country Code','Year'],how='left')
 
 
-# In[77]:
+# In[48]:
 
 
 events_merge_gdp.drop('Country Name',axis=1,inplace=True)
 
 
-# In[78]:
+# In[49]:
 
 
 events_merge_gdp.head(2)
@@ -305,7 +305,7 @@ events_merge_gdp.head(2)
 os.chdir('C:/Users/ASUS/Desktop/ACF/Olympics Data Analysis')
 
 
-# In[84]:
+# In[50]:
 
 
 pop=pd.read_csv('world_pop.csv')
@@ -314,7 +314,7 @@ pop=pop.melt(id_vars=['Country','Country Code'],var_name='Year',value_name='Popu
 pop.head(2)
 
 
-# In[85]:
+# In[51]:
 
 
 (events_merge_gdp['Country Code'].nunique())-(pop['Country Code'].nunique())
@@ -326,39 +326,39 @@ pop.head(2)
 events_complete=pd.merge(events_merge_gdp,pop,left_on=['Country Code','Year'],right_on=['Country Code','Year'],how='left')
 
 
-# In[87]:
+# In[52]:
 
 
 pop['Year']=pop['Year'].astype(int)
 events_merge_gdp['Year']=events_merge_gdp['Year'].astype('int')
 
 
-# In[88]:
+# In[53]:
 
 
 events_complete=pd.merge(events_merge_gdp,pop,left_on=['Country Code','Year'],right_on=['Country Code','Year'],how='left')
 
 
-# In[89]:
+# In[54]:
 
 
 events_complete.head(
 )
 
 
-# In[91]:
+# In[55]:
 
 
 events_complete.drop('Country',axis=1,inplace=True)
 
 
-# In[92]:
+# In[56]:
 
 
 events_complete.isnull().sum()
 
 
-# In[95]:
+# In[57]:
 
 
 #Lets take data from 1961 onwards only and for summer olympics only
@@ -368,13 +368,14 @@ events_complete_subset = events_complete.loc[(events_complete['Year'] > 1960) & 
 events_complete_subset = events_complete_subset.reset_index()
 
 
-# In[97]:
+# In[99]:
 
 
 events_complete_subset['Medals_Won']=np.where(events_complete_subset.loc[:,'Medal']=='DNW',0,1)
+events_complete_subset.head()
 
 
-# In[110]:
+# In[59]:
 
 
 identify_team_events = pd.pivot_table(events_complete_subset,
@@ -385,26 +386,26 @@ identify_team_events = pd.pivot_table(events_complete_subset,
                                      fill_value = 0).drop('DNW', axis = 1).reset_index()
 
 
-# In[111]:
+# In[60]:
 
 
 identify_team_events.head()
 
 
-# In[101]:
+# In[61]:
 
 
 events_complete_subset
 
 
-# In[114]:
+# In[62]:
 
 
 identify_team_events = identify_team_events.loc[identify_team_events['Gold'] > 1, :]
 team_sports = identify_team_events['Event'].unique()
 
 
-# In[116]:
+# In[63]:
 
 
 identify_team_events
@@ -417,19 +418,19 @@ identify_team_events
 team_sports
 
 
-# In[108]:
+# In[64]:
 
 
 identify_team_events.nunique()
 
 
-# In[120]:
+# In[65]:
 
 
 identify_team_events.loc[identify_team_events['Event']=="Swimming Men's 50 metres Freestyle"]
 
 
-# In[121]:
+# In[66]:
 
 
 remove_sports = ["Gymnastics Women's Balance Beam", "Gymnastics Men's Horizontal Bar", 
@@ -438,13 +439,13 @@ remove_sports = ["Gymnastics Women's Balance Beam", "Gymnastics Men's Horizontal
 team_sports = list(set(team_sports) - set(remove_sports))
 
 
-# In[122]:
+# In[67]:
 
 
 team_sports
 
 
-# In[125]:
+# In[68]:
 
 
 team_event_mask = events_complete_subset['Event'].map(lambda x: x in team_sports)
@@ -463,13 +464,13 @@ events_complete_subset['Single_Event'] = np.where(single_event_mask & medal_mask
 events_complete_subset['Event_Category'] = events_complete_subset['Single_Event'] + events_complete_subset['Team_Event']
 
 
-# In[128]:
+# In[69]:
 
 
 events_complete_subset.head()
 
 
-# In[182]:
+# In[70]:
 
 
 medal_tally_agnostic = events_complete_subset.groupby(['Year', 'Team', 'Event', 'Medal'])[['Medals_Won', 'Event_Category']].agg('sum').reset_index()
@@ -478,7 +479,7 @@ medal_tally_agnostic['Medal_Won_Corrected'] = medal_tally_agnostic['Medals_Won']
 medal_tally_agnostic.sort_values(by='Medal_Won_Corrected').head()
 
 
-# In[131]:
+# In[71]:
 
 
 # Medal Tally.
@@ -495,7 +496,7 @@ medal_tally_pivot = pd.pivot_table(medal_tally,
 medal_tally_pivot.loc[:,'All']
 
 
-# In[136]:
+# In[72]:
 
 
 top_countries = ['USA', 'Russia', 'Germany', 'China']
@@ -513,7 +514,7 @@ plt.ylabel('Number of Medals')
 plt.title('Olympic Performance Comparison')
 
 
-# In[183]:
+# In[73]:
 
 
 # List of top countries
@@ -539,7 +540,7 @@ plt.xlabel('Number of Medals')
 plt.ylabel('Country')
 
 
-# In[151]:
+# In[112]:
 
 
 best_team_sports = pd.pivot_table(medal_tally_agnostic[row_mask_2],
@@ -552,7 +553,7 @@ best_team_sports.drop(['Bronze','Silver','DNW'],axis=1,inplace=True)
 best_team_sports.groupby('Team').head(5)
 
 
-# In[169]:
+# In[75]:
 
 
 # take for each year, the team, name of the athlete and gender of the athlete and drop duplicates. These are values
@@ -564,7 +565,7 @@ row_mask_3 = events_complete_subset['Team'].map(lambda x: x in top_countries)
 year_team_gender = events_complete_subset.loc[row_mask_3, ['Year','Team', 'Name', 'Sex']].drop_duplicates()
 
 
-# In[170]:
+# In[76]:
 
 
 year_team_gender_count = pd.pivot_table(year_team_gender,
@@ -574,7 +575,7 @@ year_team_gender_count = pd.pivot_table(year_team_gender,
 year_team_gender_count.head()
 
 
-# In[171]:
+# In[77]:
 
 
 year_team_gender_count.columns = year_team_gender_count.columns.get_level_values(0)
@@ -584,7 +585,7 @@ year_team_gender_count
 
 
 
-# In[172]:
+# In[79]:
 
 
 # Separate country wise data
@@ -603,7 +604,7 @@ usa_data = year_team_gender_count[year_team_gender_count['Team'] == "USA"]
 usa_data.set_index('Year', inplace = True)
 
 
-# In[178]:
+# In[80]:
 
 
 fig,((ax1,ax2),(ax3,ax4))=plt.subplots(nrows=2,ncols=2,figsize=(20,12),sharey=True)
@@ -644,7 +645,7 @@ ax4.legend(loc = 'best')
 plt.show()
 
 
-# In[184]:
+# In[89]:
 
 
 # Get year wise team wise athletes.
@@ -712,4 +713,169 @@ ax4.set_title('Team Russia\nContingent Size vs Medal Tally')
 ax4.legend(loc = 'best')
 
 plt.show()
+
+
+# In[81]:
+
+
+years_team_medal
+
+
+# In[2]:
+
+
+years_team_medals
+
+
+# In[82]:
+
+
+year_team_medals.head(
+)
+
+
+# In[83]:
+
+
+year_team_medals
+
+
+# In[98]:
+
+
+year_team_medals_unstack=year_team_medals.unstack().reset_index()
+year_team_medals_unstack.columns=['Team','Year','Medal_Count']
+contingent_size_unstack=contingent_size.unstack().reset_index()
+contingent_size_unstack.columns=['Team','Year','Contingent']
+contingent_size_medals=pd.merge(contingent_size_unstack,year_team_medals_unstack,left_on=['Team','Year'],right_on=['Team','Year'],how='inner')
+contingent_size_medals[['Contingent','Medal_Count']].corr()
+
+
+# In[96]:
+
+
+
+
+
+# In[117]:
+
+
+team_commonalities=best_team_sports.merge(events_complete_subset.loc[:,['Sport','Event']].drop_duplicates(),on='Event').sort_values(['Team','Gold'],ascending=(True,False)).groupby('Team')
+team_commonalities=team_commonalities.head(5).reset_index()
+team_commonalities.head()
+
+
+# In[118]:
+
+
+# make a pivot table of the commonalities.
+pd.pivot_table(team_commonalities,
+              index = 'Sport',
+              columns = 'Team',
+              values = 'Event',
+              aggfunc = 'count',
+              fill_value = 0,
+              margins = True).sort_values('All', ascending = False)[1:]
+
+
+# In[142]:
+
+
+events_complete_subset[['Year','Team','Medals_Won']].sort_values(['Year','Medals_Won'],ascending=(True,False)).head()
+
+
+# In[124]:
+
+
+events_complete_subset[['Year','City']].drop_duplicates().sort_values('Year')
+
+
+# In[126]:
+
+
+events_complete_subset['City'].replace(['Moskva','Athina'],['Moscow','Athens'],inplace=True)
+
+
+# In[131]:
+
+
+city_to_country={'Tokyo':'Japan',
+                'Mexico City':'USA',
+                'Munich':'Germany',
+                'Montreal':'Canada',
+                'Moscow':'Russia',
+                'Los Angeles':'USA',
+                'Seoul':'South Korea',
+                'Barcelona':'Spain',
+                'Atlanta':'USA',
+                'Sydney':'Australia',
+                'Athens':'Greece',
+                'Beijing':'China',
+                'London':'UK',
+                'Rio de Janeiro':'Brazil'}
+events_complete_subset['Host Country']=events_complete_subset['City'].map(city_to_country)
+print(events_complete_subset[['Year','Host Country']].drop_duplicates().sort_values('Year'))
+
+
+# In[134]:
+
+
+year_host_team=events_complete_subset[['Year','Host Country','Team']].drop_duplicates().sort_values('Year')
+year_host_team.head()
+
+
+# In[148]:
+
+
+# check countries where host team is participating in its own country
+row_mask_4 = (year_host_team['Host Country'] == year_host_team['Team'])
+
+# add years in the year_host_team to capture one previous and one later year
+year_host_team['Prev_Year'] = year_host_team['Year'] - 4
+year_host_team['Next_Year'] = year_host_team['Year'] + 4
+
+year_host_team.head()
+
+
+# In[147]:
+
+
+year_host_team=year_host_team[row_mask_4]
+year_host_team
+
+
+# In[152]:
+
+
+year_host_team_medal = year_host_team.merge(medal_tally,
+                                           left_on = ['Year', 'Team'],
+                                           right_on = ['Year', 'Team'],
+                                           how = 'left')
+year_host_team_medal.rename(columns = {'Medal_Won_Corrected' : 'Medal_Won_Host_Year'}, inplace = True)
+year_host_team_medal.head()
+
+
+# In[192]:
+
+
+# Calculate medals won by team in previous year
+year_host_team_medal = year_host_team_medal.merge(medal_tally,
+                                                 left_on = ['Prev_Year', 'Team'],
+                                                 right_on = ['Year', 'Team'],
+                                                 how = 'left')
+year_host_team_medal.drop('Year_y', axis = 1, inplace = True)
+year_host_team_medal.rename(columns = {'Medal_Won_Corrected_previous': 'Medal_Won_Prev_Year',
+                                      'Year_x':'Year','Next_Year':'Next Year'}, inplace = True)
+
+
+year_host_team_medal.drop(['Medal_Won_Corrected_x','Medal_Won_Corrected_y'],axis=1,inplace=True)
+
+year_host_team_medal.head()
+
+
+# In[194]:
+
+
+year_host_team_medal=pd.merge(year_host_team_medal,medal_tally,left_on=['Next Year','Team'],right_on=['Year','Team'],how='left')
+year_host_team_medal.head()
 
